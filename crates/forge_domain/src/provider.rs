@@ -92,6 +92,13 @@ impl Provider {
         }
     }
 
+    pub fn chutes(key: &str) -> Provider {
+        Provider::OpenAI {
+            url: Url::parse(Provider::CHUTES_URL).unwrap(),
+            key: Some(key.into()),
+        }
+    }
+
     pub fn anthropic(key: &str) -> Provider {
         Provider::Anthropic {
             url: Url::parse(Provider::ANTHROPIC_URL).unwrap(),
@@ -114,6 +121,7 @@ impl Provider {
     pub const OPENAI_URL: &str = "https://api.openai.com/v1/";
     pub const ANTHROPIC_URL: &str = "https://api.anthropic.com/v1/";
     pub const FORGE_URL: &str = "https://antinomy.ai/api/v1/";
+    pub const CHUTES_URL: &str = "https://api.chutes.ai/v1/";
 
     /// Converts the provider to it's base URL
     pub fn to_base_url(&self) -> Url {
@@ -154,6 +162,13 @@ impl Provider {
     pub fn is_open_ai(&self) -> bool {
         match self {
             Provider::OpenAI { url, .. } => url.as_str().starts_with(Self::OPENAI_URL),
+            Provider::Anthropic { .. } => false,
+        }
+    }
+
+    pub fn is_chutes(&self) -> bool {
+        match self {
+            Provider::OpenAI { url, .. } => url.as_str().starts_with(Self::CHUTES_URL),
             Provider::Anthropic { .. } => false,
         }
     }
@@ -268,6 +283,26 @@ mod tests {
                 key: "key".to_string()
             }
         );
+    }
+
+    #[test]
+    fn test_chutes() {
+        let fixture = "test_key";
+        let actual = Provider::chutes(fixture);
+        let expected = Provider::OpenAI {
+            url: Url::from_str("https://api.chutes.ai/v1/").unwrap(),
+            key: Some(fixture.to_string()),
+        };
+        assert_eq!(actual, expected);
+    }
+
+    #[test]
+    fn test_is_chutes() {
+        let fixture_chutes = Provider::chutes("key");
+        assert!(fixture_chutes.is_chutes());
+
+        let fixture_other = Provider::openai("key");
+        assert!(!fixture_other.is_chutes());
     }
 
     #[test]
