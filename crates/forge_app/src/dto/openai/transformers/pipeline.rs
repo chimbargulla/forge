@@ -62,5 +62,6 @@ mod tests {
         )));
         assert!(!supports_open_router_params(&Provider::xai("xai")));
         assert!(!supports_open_router_params(&Provider::anthropic("claude")));
+        assert!(!supports_open_router_params(&Provider::chutes("chutes")));
     }
 }

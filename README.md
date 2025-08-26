@@ -231,6 +231,18 @@ switch the model using `/model` command in the Forge CLI.
 </details>
 
 <details>
+<summary><strong>Chutes AI</strong></summary>
+
+```bash
+# .env
+CHUTES_API_TOKEN=<your_chutes_api_token>
+```
+
+switch the model using `/model` command in the Forge CLI.
+
+</details>
+
+<details>
 <summary><strong>OpenAI</strong></summary>
 
 ```bash

@@ -51,7 +51,7 @@ impl<F: EnvironmentInfra> ProviderRegistry for ForgeProviderRegistry<F> {
 
         let provider = self
             .get_provider(config)
-            .context("No valid provider configuration found. Please set one of the following environment variables: OPENROUTER_API_KEY, REQUESTY_API_KEY, XAI_API_KEY, OPENAI_API_KEY, or ANTHROPIC_API_KEY. For more details, visit: https://forgecode.dev/docs/custom-providers/")?;
+            .context("No valid provider configuration found. Please set one of the following environment variables: OPENROUTER_API_KEY, REQUESTY_API_KEY, XAI_API_KEY, OPENAI_API_KEY, ANTHROPIC_API_KEY, CEREBRAS_API_KEY, ZAI_API_KEY, or CHUTES_API_TOKEN. For more details, visit: https://forgecode.dev/docs/custom-providers/")?;
         self.cache.write().await.replace(provider.clone());
         Ok(provider)
     }
@@ -61,7 +61,7 @@ fn resolve_env_provider<F: EnvironmentInfra>(
     url: Option<ProviderUrl>,
     env: &F,
 ) -> Option<Provider> {
-    let keys: [ProviderSearch; 7] = [
+    let keys: [ProviderSearch; 8] = [
         // ("FORGE_KEY", Box::new(Provider::forge)),
         ("OPENROUTER_API_KEY", Box::new(Provider::open_router)),
         ("REQUESTY_API_KEY", Box::new(Provider::requesty)),
@@ -70,6 +70,7 @@ fn resolve_env_provider<F: EnvironmentInfra>(
         ("ANTHROPIC_API_KEY", Box::new(Provider::anthropic)),
         ("CEREBRAS_API_KEY", Box::new(Provider::cerebras)),
         ("ZAI_API_KEY", Box::new(Provider::zai)),
+        ("CHUTES_API_TOKEN", Box::new(Provider::chutes)),
     ];
 
     keys.into_iter().find_map(|(key, fun)| {
